@@ -44,6 +44,7 @@ export function updateMarketplaceOrderInfo(event: any, id: Bytes, type: string) 
   if (info === null) {
     info = new MarketplaceOrderInfo(id.toString());
   }
+  info.event = type
   info.assetId = event.params.assetId
   info.seller = event.params.seller
   info.nftAddress = event.params.nftAddress
