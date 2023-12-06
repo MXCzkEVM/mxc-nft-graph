@@ -1,0 +1,30 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: MXCCollectionFactory
+    network: mainnet
+    source:
+      address: "0xD15A89C59A1aF63588B0b905dAD47eF20058998a"
+      abi: MXCCollectionFactory
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - delCollectionEvent
+        - editCollectionEvent
+        - newCollectionEvent
+      abis:
+        - name: MXCCollectionFactory
+          file: ./abis/MXCCollectionFactory.json
+      eventHandlers:
+        - event: delCollectionEvent(indexed address,indexed address)
+          handler: handledelCollectionEvent
+        - event: editCollectionEvent(indexed address,indexed address)
+          handler: handleeditCollectionEvent
+        - event: newCollectionEvent(indexed address,indexed address)
+          handler: handlenewCollectionEvent
+      file: ./src/mxc-collection-factory.ts

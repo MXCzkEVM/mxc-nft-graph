@@ -1,0 +1,26 @@
+type delCollectionEvent @entity(immutable: true) {
+  id: Bytes!
+  collectionAddress: Bytes! # address
+  owner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type editCollectionEvent @entity(immutable: true) {
+  id: Bytes!
+  collectionAddress: Bytes! # address
+  owner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type newCollectionEvent @entity(immutable: true) {
+  id: Bytes!
+  collectionAddress: Bytes! # address
+  owner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
