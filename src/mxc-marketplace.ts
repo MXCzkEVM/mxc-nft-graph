@@ -39,7 +39,7 @@ export function handleOwnershipTransferred(
   entity.save()
 }
 
-export function updateMarketplaceOrderInfo(event: any, id: Bytes, type: string) {
+function updateMarketplaceOrderInfo(event: any, id: Bytes, type: string) {
   let info = MarketplaceOrderInfo.load(id.toString());
   if (info === null) {
     info = new MarketplaceOrderInfo(id.toString());
