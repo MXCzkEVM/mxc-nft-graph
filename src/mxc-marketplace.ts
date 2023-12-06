@@ -1,4 +1,4 @@
-import { Address } from "@graphprotocol/graph-ts";
+import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import {
   MXCMarketplace,
   OrderCancelled as OrderCancelledEvent,
@@ -7,65 +7,20 @@ import {
   OwnershipTransferred as OwnershipTransferredEvent
 } from "../generated/MXCMarketplace/MXCMarketplace"
 import {
-  OrderCancelled,
-  OrderCreated,
-  OrderSuccessful,
+  MarketplaceOrderInfo,
   OwnershipTransferred
 } from "../generated/schema"
 
-const ContractAddress = "0x8Ff08F39B1F4Ad7dc42E6D63fd25AeE47EA801Ce";
-const mxcMarketplace = MXCMarketplace.bind(Address.fromString(ContractAddress));
-
 export function handleOrderCancelled(event: OrderCancelledEvent): void {
-  let entity = new OrderCancelled(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.MXCMarketplace_id = event.params.id
-  entity.assetId = event.params.assetId
-  entity.seller = event.params.seller
-  entity.nftAddress = event.params.nftAddress
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  updateMarketplaceOrderInfo(event, event.params.id, 'cancelled')
 }
 
 export function handleOrderCreated(event: OrderCreatedEvent): void {
-  let entity = new OrderCreated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.MXCMarketplace_id = event.params.id
-  entity.assetId = event.params.assetId
-  entity.seller = event.params.seller
-  entity.nftAddress = event.params.nftAddress
-  entity.priceInWei = event.params.priceInWei
-  entity.expiresAt = event.params.expiresAt
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  updateMarketplaceOrderInfo(event, event.params.id, 'created')
 }
 
 export function handleOrderSuccessful(event: OrderSuccessfulEvent): void {
-  let entity = new OrderSuccessful(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.MXCMarketplace_id = event.params.id
-  entity.assetId = event.params.assetId
-  entity.seller = event.params.seller
-  entity.nftAddress = event.params.nftAddress
-  entity.totalPrice = event.params.totalPrice
-  entity.buyer = event.params.buyer
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  updateMarketplaceOrderInfo(event, event.params.id, 'successful')
 }
 
 export function handleOwnershipTransferred(
@@ -82,4 +37,24 @@ export function handleOwnershipTransferred(
   entity.transactionHash = event.transaction.hash
 
   entity.save()
+}
+
+export function updateMarketplaceOrderInfo(event: any, id: Bytes, type: string) {
+  let info = MarketplaceOrderInfo.load(id.toString());
+  if (info === null) {
+    info = new MarketplaceOrderInfo(id.toString());
+  }
+  info.assetId = event.params.assetId
+  info.seller = event.params.seller
+  info.nftAddress = event.params.nftAddress
+  info.priceInWei = event.params.priceInWei
+  info.expiresAt = event.params.expiresAt
+  info.totalPrice = event.params.totalPrice
+  info.buyer = event.params.buyer
+
+  info.blockNumber = event.block.number
+  info.blockTimestamp = event.block.timestamp
+  info.transactionHash = event.transaction.hash
+
+  info.save()
 }
