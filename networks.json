@@ -3,6 +3,9 @@
     "MXCCollectionFactory": {
       "address": "0xD15A89C59A1aF63588B0b905dAD47eF20058998a",
       "startBlock": 0
+    },
+    "MXCMarketplace": {
+      "address": "0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2"
     }
   }
 }

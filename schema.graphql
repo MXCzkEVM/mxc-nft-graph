@@ -1,4 +1,4 @@
-type delCollectionEvent @entity(immutable: true) {
+type DelCollectionEvent @entity(immutable: true) {
   id: Bytes!
   collectionAddress: Bytes! # address
   owner: Bytes! # address
@@ -7,7 +7,7 @@ type delCollectionEvent @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type editCollectionEvent @entity(immutable: true) {
+type EditCollectionEvent @entity(immutable: true) {
   id: Bytes!
   collectionAddress: Bytes! # address
   owner: Bytes! # address
@@ -16,10 +16,56 @@ type editCollectionEvent @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type newCollectionEvent @entity(immutable: true) {
+type NewCollectionEvent @entity(immutable: true) {
   id: Bytes!
   collectionAddress: Bytes! # address
   owner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OrderCancelled @entity(immutable: true) {
+  id: Bytes!
+  MXCMarketplace_id: Bytes! # bytes32
+  assetId: BigInt! # uint256
+  seller: Bytes! # address
+  nftAddress: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OrderCreated @entity(immutable: true) {
+  id: Bytes!
+  MXCMarketplace_id: Bytes! # bytes32
+  assetId: BigInt! # uint256
+  seller: Bytes! # address
+  nftAddress: Bytes! # address
+  priceInWei: BigInt! # uint256
+  expiresAt: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OrderSuccessful @entity(immutable: true) {
+  id: Bytes!
+  MXCMarketplace_id: Bytes! # bytes32
+  assetId: BigInt! # uint256
+  seller: Bytes! # address
+  nftAddress: Bytes! # address
+  totalPrice: BigInt! # uint256
+  buyer: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

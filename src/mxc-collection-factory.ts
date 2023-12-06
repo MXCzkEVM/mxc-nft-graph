@@ -4,13 +4,13 @@ import {
   newCollectionEvent as newCollectionEventEvent
 } from "../generated/MXCCollectionFactory/MXCCollectionFactory"
 import {
-  delCollectionEvent,
-  editCollectionEvent,
-  newCollectionEvent
+  DelCollectionEvent,
+  EditCollectionEvent,
+  NewCollectionEvent
 } from "../generated/schema"
 
 export function handledelCollectionEvent(event: delCollectionEventEvent): void {
-  let entity = new delCollectionEvent(
+  let entity = new DelCollectionEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.collectionAddress = event.params.collectionAddress
@@ -26,7 +26,7 @@ export function handledelCollectionEvent(event: delCollectionEventEvent): void {
 export function handleeditCollectionEvent(
   event: editCollectionEventEvent
 ): void {
-  let entity = new editCollectionEvent(
+  let entity = new EditCollectionEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.collectionAddress = event.params.collectionAddress
@@ -40,7 +40,7 @@ export function handleeditCollectionEvent(
 }
 
 export function handlenewCollectionEvent(event: newCollectionEventEvent): void {
-  let entity = new newCollectionEvent(
+  let entity = new NewCollectionEvent(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.collectionAddress = event.params.collectionAddress

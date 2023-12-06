@@ -28,3 +28,33 @@ dataSources:
         - event: newCollectionEvent(indexed address,indexed address)
           handler: handlenewCollectionEvent
       file: ./src/mxc-collection-factory.ts
+  - kind: ethereum
+    name: MXCMarketplace
+    network: mainnet
+    source:
+      address: "0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2"
+      abi: MXCMarketplace
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - OrderCancelled
+        - OrderCreated
+        - OrderSuccessful
+        - OwnershipTransferred
+      abis:
+        - name: MXCMarketplace
+          file: ./abis/MXCMarketplace.json
+      eventHandlers:
+        - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
+          handler: handleOrderCancelled
+        - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
+          handler: handleOrderCreated
+        - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed
+            address)
+          handler: handleOrderSuccessful
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+      file: ./src/mxc-marketplace.ts
