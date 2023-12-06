@@ -27,7 +27,7 @@ type NewCollectionEvent @entity(immutable: true) {
 
 
 type MarketplaceOrderInfo @entity(immutable: true) {
-  id: String!
+  id: Bytes!
   assetId: BigInt! # uint256
   seller: Bytes! # address
   nftAddress: Bytes! # address

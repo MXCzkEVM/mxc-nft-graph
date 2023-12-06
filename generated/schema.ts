@@ -339,9 +339,9 @@ export class NewCollectionEvent extends Entity {
 }
 
 export class MarketplaceOrderInfo extends Entity {
-  constructor(id: string) {
+  constructor(id: Bytes) {
     super();
-    this.set("id", Value.fromString(id));
+    this.set("id", Value.fromBytes(id));
   }
 
   save(): void {
@@ -349,36 +349,36 @@ export class MarketplaceOrderInfo extends Entity {
     assert(id != null, "Cannot save MarketplaceOrderInfo entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type MarketplaceOrderInfo must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.BYTES,
+        `Entities of type MarketplaceOrderInfo must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("MarketplaceOrderInfo", id.toString(), this);
+      store.set("MarketplaceOrderInfo", id.toBytes().toHexString(), this);
     }
   }
 
-  static loadInBlock(id: string): MarketplaceOrderInfo | null {
+  static loadInBlock(id: Bytes): MarketplaceOrderInfo | null {
     return changetype<MarketplaceOrderInfo | null>(
-      store.get_in_block("MarketplaceOrderInfo", id)
+      store.get_in_block("MarketplaceOrderInfo", id.toHexString())
     );
   }
 
-  static load(id: string): MarketplaceOrderInfo | null {
+  static load(id: Bytes): MarketplaceOrderInfo | null {
     return changetype<MarketplaceOrderInfo | null>(
-      store.get("MarketplaceOrderInfo", id)
+      store.get("MarketplaceOrderInfo", id.toHexString())
     );
   }
 
-  get id(): string {
+  get id(): Bytes {
     let value = this.get("id");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toString();
+      return value.toBytes();
     }
   }
 
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
   }
 
   get assetId(): BigInt {

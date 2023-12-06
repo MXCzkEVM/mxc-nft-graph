@@ -12,9 +12,9 @@ import {
 } from "../generated/schema"
 
 export function handleOrderCancelled(event: OrderCancelledEvent): void {
-  let info = MarketplaceOrderInfo.load(event.params.id.toString());
-  if (info === null)
-    info = new MarketplaceOrderInfo(event.params.id.toString());
+  const info = new MarketplaceOrderInfo(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
 
   info.event = 'cancelled'
   info.assetId = event.params.assetId
@@ -29,10 +29,9 @@ export function handleOrderCancelled(event: OrderCancelledEvent): void {
 }
 
 export function handleOrderCreated(event: OrderCreatedEvent): void {
-
-  let info = MarketplaceOrderInfo.load(event.params.id.toString());
-  if (info === null)
-    info = new MarketplaceOrderInfo(event.params.id.toString());
+  const info = new MarketplaceOrderInfo(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
   
   info.event = 'created'
   info.assetId = event.params.assetId
@@ -47,9 +46,9 @@ export function handleOrderCreated(event: OrderCreatedEvent): void {
 }
 
 export function handleOrderSuccessful(event: OrderSuccessfulEvent): void {
-  let info = MarketplaceOrderInfo.load(event.params.id.toString());
-  if (info === null)
-    info = new MarketplaceOrderInfo(event.params.id.toString());
+  const info = new MarketplaceOrderInfo(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
   
   info.event = 'successful'
   info.assetId = event.params.assetId
