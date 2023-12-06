@@ -12,15 +12,57 @@ import {
 } from "../generated/schema"
 
 export function handleOrderCancelled(event: OrderCancelledEvent): void {
-  updateMarketplaceOrderInfo(event, event.params.id, 'cancelled')
+  let info = MarketplaceOrderInfo.load(event.params.id.toString());
+  if (info === null)
+    info = new MarketplaceOrderInfo(event.params.id.toString());
+
+  info.event = 'cancelled'
+  info.assetId = event.params.assetId
+  info.seller = event.params.seller
+  info.nftAddress = event.params.nftAddress
+
+  info.blockNumber = event.block.number
+  info.blockTimestamp = event.block.timestamp
+  info.transactionHash = event.transaction.hash
+
+  info.save()
 }
 
 export function handleOrderCreated(event: OrderCreatedEvent): void {
-  updateMarketplaceOrderInfo(event, event.params.id, 'created')
+
+  let info = MarketplaceOrderInfo.load(event.params.id.toString());
+  if (info === null)
+    info = new MarketplaceOrderInfo(event.params.id.toString());
+  
+  info.event = 'created'
+  info.assetId = event.params.assetId
+  info.seller = event.params.seller
+  info.nftAddress = event.params.nftAddress
+
+  info.blockNumber = event.block.number
+  info.blockTimestamp = event.block.timestamp
+  info.transactionHash = event.transaction.hash
+
+  info.save()
 }
 
 export function handleOrderSuccessful(event: OrderSuccessfulEvent): void {
-  updateMarketplaceOrderInfo(event, event.params.id, 'successful')
+  let info = MarketplaceOrderInfo.load(event.params.id.toString());
+  if (info === null)
+    info = new MarketplaceOrderInfo(event.params.id.toString());
+  
+  info.event = 'successful'
+  info.assetId = event.params.assetId
+  info.seller = event.params.seller
+  info.nftAddress = event.params.nftAddress
+  info.totalPrice = event.params.totalPrice
+  info.buyer = event.params.buyer
+
+  info.blockNumber = event.block.number
+  info.blockTimestamp = event.block.timestamp
+  info.transactionHash = event.transaction.hash
+
+  info.save()
 }
 
 export function handleOwnershipTransferred(
@@ -37,25 +79,4 @@ export function handleOwnershipTransferred(
   entity.transactionHash = event.transaction.hash
 
   entity.save()
-}
-
-function updateMarketplaceOrderInfo(event: any, id: Bytes, type: string) {
-  let info = MarketplaceOrderInfo.load(id.toString());
-  if (info === null) {
-    info = new MarketplaceOrderInfo(id.toString());
-  }
-  info.event = type
-  info.assetId = event.params.assetId
-  info.seller = event.params.seller
-  info.nftAddress = event.params.nftAddress
-  info.priceInWei = event.params.priceInWei
-  info.expiresAt = event.params.expiresAt
-  info.totalPrice = event.params.totalPrice
-  info.buyer = event.params.buyer
-
-  info.blockNumber = event.block.number
-  info.blockTimestamp = event.block.timestamp
-  info.transactionHash = event.transaction.hash
-
-  info.save()
 }
