@@ -67,4 +67,3 @@ dataSources:
         - event: Upgraded(indexed address)
           handler: handleUpgraded
       file: ./src/mxc-marketplace.ts
-src/mxc-collection-factory.ts
