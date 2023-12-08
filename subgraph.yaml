@@ -27,12 +27,12 @@ dataSources:
           handler: handleeditCollectionEvent
         - event: newCollectionEvent(indexed address,indexed address)
           handler: handlenewCollectionEvent
-      file: ./src/mxc-collection-factory.ts
+      file: ./
   - kind: ethereum
     name: MXCMarketplace
     network: mainnet
     source:
-      address: "0xe031013A7B7Caf05FC20Bdc49B731E3F2f0cAfFd"
+      address: "0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2"
       abi: MXCMarketplace
       startBlock: 0
     mapping:
@@ -67,3 +67,4 @@ dataSources:
         - event: Upgraded(indexed address)
           handler: handleUpgraded
       file: ./src/mxc-marketplace.ts
+src/mxc-collection-factory.ts
