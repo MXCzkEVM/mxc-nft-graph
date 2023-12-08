@@ -10,6 +10,64 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class AdminChanged extends ethereum.Event {
+  get params(): AdminChanged__Params {
+    return new AdminChanged__Params(this);
+  }
+}
+
+export class AdminChanged__Params {
+  _event: AdminChanged;
+
+  constructor(event: AdminChanged) {
+    this._event = event;
+  }
+
+  get previousAdmin(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newAdmin(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class BeaconUpgraded extends ethereum.Event {
+  get params(): BeaconUpgraded__Params {
+    return new BeaconUpgraded__Params(this);
+  }
+}
+
+export class BeaconUpgraded__Params {
+  _event: BeaconUpgraded;
+
+  constructor(event: BeaconUpgraded) {
+    this._event = event;
+  }
+
+  get beacon(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class Initialized extends ethereum.Event {
+  get params(): Initialized__Params {
+    return new Initialized__Params(this);
+  }
+}
+
+export class Initialized__Params {
+  _event: Initialized;
+
+  constructor(event: Initialized) {
+    this._event = event;
+  }
+
+  get version(): i32 {
+    return this._event.parameters[0].value.toI32();
+  }
+}
+
 export class OrderCancelled extends ethereum.Event {
   get params(): OrderCancelled__Params {
     return new OrderCancelled__Params(this);
@@ -116,25 +174,21 @@ export class OrderSuccessful__Params {
   }
 }
 
-export class OwnershipTransferred extends ethereum.Event {
-  get params(): OwnershipTransferred__Params {
-    return new OwnershipTransferred__Params(this);
+export class Upgraded extends ethereum.Event {
+  get params(): Upgraded__Params {
+    return new Upgraded__Params(this);
   }
 }
 
-export class OwnershipTransferred__Params {
-  _event: OwnershipTransferred;
+export class Upgraded__Params {
+  _event: Upgraded;
 
-  constructor(event: OwnershipTransferred) {
+  constructor(event: Upgraded) {
     this._event = event;
   }
 
-  get previousOwner(): Address {
+  get implementation(): Address {
     return this._event.parameters[0].value.toAddress();
-  }
-
-  get newOwner(): Address {
-    return this._event.parameters[1].value.toAddress();
   }
 }
 
@@ -182,6 +236,31 @@ export class MXCMarketplace__cancelOrderResultValue0Struct extends ethereum.Tupl
 
   get expiresAt(): BigInt {
     return this[4].toBigInt();
+  }
+}
+
+export class MXCMarketplace__collectionMarketInfoResult {
+  value0: BigInt;
+  value1: BigInt;
+
+  constructor(value0: BigInt, value1: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    return map;
+  }
+
+  getFloorPrice(): BigInt {
+    return this.value0;
+  }
+
+  getCeilingPrice(): BigInt {
+    return this.value1;
   }
 }
 
@@ -263,6 +342,21 @@ export class MXCMarketplace extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  admin(): Address {
+    let result = super.call("admin", "admin():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_admin(): ethereum.CallResult<Address> {
+    let result = super.tryCall("admin", "admin():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   assertPrice(
@@ -347,6 +441,71 @@ export class MXCMarketplace extends ethereum.SmartContract {
         value[0].toTuple()
       )
     );
+  }
+
+  collectionMarketInfo(
+    param0: Address
+  ): MXCMarketplace__collectionMarketInfoResult {
+    let result = super.call(
+      "collectionMarketInfo",
+      "collectionMarketInfo(address):(uint256,uint256)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+
+    return new MXCMarketplace__collectionMarketInfoResult(
+      result[0].toBigInt(),
+      result[1].toBigInt()
+    );
+  }
+
+  try_collectionMarketInfo(
+    param0: Address
+  ): ethereum.CallResult<MXCMarketplace__collectionMarketInfoResult> {
+    let result = super.tryCall(
+      "collectionMarketInfo",
+      "collectionMarketInfo(address):(uint256,uint256)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new MXCMarketplace__collectionMarketInfoResult(
+        value[0].toBigInt(),
+        value[1].toBigInt()
+      )
+    );
+  }
+
+  domainToken(): Address {
+    let result = super.call("domainToken", "domainToken():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_domainToken(): ethereum.CallResult<Address> {
+    let result = super.tryCall("domainToken", "domainToken():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  nameToken(): Address {
+    let result = super.call("nameToken", "nameToken():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_nameToken(): ethereum.CallResult<Address> {
+    let result = super.tryCall("nameToken", "nameToken():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   onERC721Received(
@@ -441,19 +600,23 @@ export class MXCMarketplace extends ethereum.SmartContract {
     );
   }
 
-  owner(): Address {
-    let result = super.call("owner", "owner():(address)", []);
+  proxiableUUID(): Bytes {
+    let result = super.call("proxiableUUID", "proxiableUUID():(bytes32)", []);
 
-    return result[0].toAddress();
+    return result[0].toBytes();
   }
 
-  try_owner(): ethereum.CallResult<Address> {
-    let result = super.tryCall("owner", "owner():(address)", []);
+  try_proxiableUUID(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "proxiableUUID",
+      "proxiableUUID():(bytes32)",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
+    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 }
 
@@ -561,6 +724,66 @@ export class CreateOrderCall__Outputs {
   }
 }
 
+export class ExecuteDomainOrderCall extends ethereum.Call {
+  get inputs(): ExecuteDomainOrderCall__Inputs {
+    return new ExecuteDomainOrderCall__Inputs(this);
+  }
+
+  get outputs(): ExecuteDomainOrderCall__Outputs {
+    return new ExecuteDomainOrderCall__Outputs(this);
+  }
+}
+
+export class ExecuteDomainOrderCall__Inputs {
+  _call: ExecuteDomainOrderCall;
+
+  constructor(call: ExecuteDomainOrderCall) {
+    this._call = call;
+  }
+
+  get assetId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class ExecuteDomainOrderCall__Outputs {
+  _call: ExecuteDomainOrderCall;
+
+  constructor(call: ExecuteDomainOrderCall) {
+    this._call = call;
+  }
+}
+
+export class ExecuteNameOrderCall extends ethereum.Call {
+  get inputs(): ExecuteNameOrderCall__Inputs {
+    return new ExecuteNameOrderCall__Inputs(this);
+  }
+
+  get outputs(): ExecuteNameOrderCall__Outputs {
+    return new ExecuteNameOrderCall__Outputs(this);
+  }
+}
+
+export class ExecuteNameOrderCall__Inputs {
+  _call: ExecuteNameOrderCall;
+
+  constructor(call: ExecuteNameOrderCall) {
+    this._call = call;
+  }
+
+  get assetId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class ExecuteNameOrderCall__Outputs {
+  _call: ExecuteNameOrderCall;
+
+  constructor(call: ExecuteNameOrderCall) {
+    this._call = call;
+  }
+}
+
 export class ExecuteOrderCall extends ethereum.Call {
   get inputs(): ExecuteOrderCall__Inputs {
     return new ExecuteOrderCall__Inputs(this);
@@ -595,58 +818,152 @@ export class ExecuteOrderCall__Outputs {
   }
 }
 
-export class RenounceOwnershipCall extends ethereum.Call {
-  get inputs(): RenounceOwnershipCall__Inputs {
-    return new RenounceOwnershipCall__Inputs(this);
+export class InitializeCall extends ethereum.Call {
+  get inputs(): InitializeCall__Inputs {
+    return new InitializeCall__Inputs(this);
   }
 
-  get outputs(): RenounceOwnershipCall__Outputs {
-    return new RenounceOwnershipCall__Outputs(this);
+  get outputs(): InitializeCall__Outputs {
+    return new InitializeCall__Outputs(this);
   }
 }
 
-export class RenounceOwnershipCall__Inputs {
-  _call: RenounceOwnershipCall;
+export class InitializeCall__Inputs {
+  _call: InitializeCall;
 
-  constructor(call: RenounceOwnershipCall) {
+  constructor(call: InitializeCall) {
     this._call = call;
   }
 }
 
-export class RenounceOwnershipCall__Outputs {
-  _call: RenounceOwnershipCall;
+export class InitializeCall__Outputs {
+  _call: InitializeCall;
 
-  constructor(call: RenounceOwnershipCall) {
+  constructor(call: InitializeCall) {
     this._call = call;
   }
 }
 
-export class TransferOwnershipCall extends ethereum.Call {
-  get inputs(): TransferOwnershipCall__Inputs {
-    return new TransferOwnershipCall__Inputs(this);
+export class SetDoaminTokenCall extends ethereum.Call {
+  get inputs(): SetDoaminTokenCall__Inputs {
+    return new SetDoaminTokenCall__Inputs(this);
   }
 
-  get outputs(): TransferOwnershipCall__Outputs {
-    return new TransferOwnershipCall__Outputs(this);
+  get outputs(): SetDoaminTokenCall__Outputs {
+    return new SetDoaminTokenCall__Outputs(this);
   }
 }
 
-export class TransferOwnershipCall__Inputs {
-  _call: TransferOwnershipCall;
+export class SetDoaminTokenCall__Inputs {
+  _call: SetDoaminTokenCall;
 
-  constructor(call: TransferOwnershipCall) {
+  constructor(call: SetDoaminTokenCall) {
     this._call = call;
   }
 
-  get newOwner(): Address {
+  get _domainToken(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 }
 
-export class TransferOwnershipCall__Outputs {
-  _call: TransferOwnershipCall;
+export class SetDoaminTokenCall__Outputs {
+  _call: SetDoaminTokenCall;
 
-  constructor(call: TransferOwnershipCall) {
+  constructor(call: SetDoaminTokenCall) {
+    this._call = call;
+  }
+}
+
+export class SetNameTokenCall extends ethereum.Call {
+  get inputs(): SetNameTokenCall__Inputs {
+    return new SetNameTokenCall__Inputs(this);
+  }
+
+  get outputs(): SetNameTokenCall__Outputs {
+    return new SetNameTokenCall__Outputs(this);
+  }
+}
+
+export class SetNameTokenCall__Inputs {
+  _call: SetNameTokenCall;
+
+  constructor(call: SetNameTokenCall) {
+    this._call = call;
+  }
+
+  get _nameToken(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetNameTokenCall__Outputs {
+  _call: SetNameTokenCall;
+
+  constructor(call: SetNameTokenCall) {
+    this._call = call;
+  }
+}
+
+export class UpgradeToCall extends ethereum.Call {
+  get inputs(): UpgradeToCall__Inputs {
+    return new UpgradeToCall__Inputs(this);
+  }
+
+  get outputs(): UpgradeToCall__Outputs {
+    return new UpgradeToCall__Outputs(this);
+  }
+}
+
+export class UpgradeToCall__Inputs {
+  _call: UpgradeToCall;
+
+  constructor(call: UpgradeToCall) {
+    this._call = call;
+  }
+
+  get newImplementation(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class UpgradeToCall__Outputs {
+  _call: UpgradeToCall;
+
+  constructor(call: UpgradeToCall) {
+    this._call = call;
+  }
+}
+
+export class UpgradeToAndCallCall extends ethereum.Call {
+  get inputs(): UpgradeToAndCallCall__Inputs {
+    return new UpgradeToAndCallCall__Inputs(this);
+  }
+
+  get outputs(): UpgradeToAndCallCall__Outputs {
+    return new UpgradeToAndCallCall__Outputs(this);
+  }
+}
+
+export class UpgradeToAndCallCall__Inputs {
+  _call: UpgradeToAndCallCall;
+
+  constructor(call: UpgradeToAndCallCall) {
+    this._call = call;
+  }
+
+  get newImplementation(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get data(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
+  }
+}
+
+export class UpgradeToAndCallCall__Outputs {
+  _call: UpgradeToAndCallCall;
+
+  constructor(call: UpgradeToAndCallCall) {
     this._call = call;
   }
 }
