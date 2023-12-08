@@ -27,7 +27,7 @@ dataSources:
           handler: handleeditCollectionEvent
         - event: newCollectionEvent(indexed address,indexed address)
           handler: handlenewCollectionEvent
-      file: ./
+      file: ./src/mxc-collection-factory.ts
   - kind: ethereum
     name: MXCMarketplace
     network: mainnet
