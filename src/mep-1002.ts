@@ -36,7 +36,7 @@ import {
 } from "../generated/schema"
 
 const ContractAddress = '0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2'
-const Mep1002Address = '0x7407459464741c17F8341D7EAFED5a4A5d9303b4'
+const Mep1002Address = '0xad5a1855A383732f311241c1A4F9510da0Ad0743'
 const MarketContract = MXCMarketplace.bind(Address.fromString(ContractAddress))
 
 export function handleAdminChanged(event: AdminChangedEvent): void {

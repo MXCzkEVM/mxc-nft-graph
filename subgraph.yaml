@@ -71,7 +71,7 @@ dataSources:
     name: MEP1002
     network: mainnet
     source:
-      address: "0x7407459464741c17F8341D7EAFED5a4A5d9303b4"
+      address: "0xad5a1855A383732f311241c1A4F9510da0Ad0743"
       abi: MEP1002
       startBlock: 0
     mapping:
