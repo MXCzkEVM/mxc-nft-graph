@@ -67,3 +67,65 @@ dataSources:
         - event: Upgraded(indexed address)
           handler: handleUpgraded
       file: ./src/mxc-marketplace.ts
+  - kind: ethereum
+    name: MEP1002
+    network: mainnet
+    source:
+      address: "0x7407459464741c17F8341D7EAFED5a4A5d9303b4"
+      abi: MEP1002
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - MEP1002AdminChanged
+        - MEP1002BeaconUpgraded
+        - MEP1002Upgraded
+        - AllChildrenRejected
+        - Approval
+        - ApprovalForAll
+        - ChildAccepted
+        - ChildProposed
+        - ChildTransferred
+        - ControllerChanged
+        - MEP1002Initialized
+        - MEP1002TokenUpdateName
+        - NestTransfer
+        - OwnershipTransferred
+        - Transfer
+      abis:
+        - name: MEP1002
+          file: ./abis/MEP1002.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+        - event: AllChildrenRejected(indexed uint256)
+          handler: handleAllChildrenRejected
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: ChildAccepted(indexed uint256,uint256,indexed address,indexed uint256)
+          handler: handleChildAccepted
+        - event: ChildProposed(indexed uint256,uint256,indexed address,indexed uint256)
+          handler: handleChildProposed
+        - event: ChildTransferred(indexed uint256,uint256,indexed address,indexed uint256,bool)
+          handler: handleChildTransferred
+        - event: ControllerChanged(indexed address,bool)
+          handler: handleControllerChanged
+        - event: Initialized(uint8)
+          handler: handleInitialized
+        - event: MEP1002TokenUpdateName(indexed uint256,string)
+          handler: handleMEP1002TokenUpdateName
+        - event: NestTransfer(indexed address,indexed address,uint256,uint256,indexed uint256)
+          handler: handleNestTransfer
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mep-1002.ts

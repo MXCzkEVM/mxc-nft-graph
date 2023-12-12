@@ -1,3 +1,4 @@
+import { Address } from "@graphprotocol/graph-ts";
 import {
   AdminChanged as AdminChangedEvent,
   BeaconUpgraded as BeaconUpgradedEvent,
