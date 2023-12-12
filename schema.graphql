@@ -72,14 +72,6 @@ type MarketplaceOrderInfo @entity(immutable: true) {
 
   # created
   priceInWei: BigInt # uint256
-  expiresAt: BigInt # uint2type MEP1002AdminChanged @entity(immutable: true) {
-  id: Bytes!
-  previousAdmin: Bytes! # address
-  newAdmin: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-
   expiresAt: BigInt # uint256
 
   # success
