@@ -89,3 +89,12 @@ type Transfer @entity(immutable: true) {
   transactionHash: Bytes!
   markPrice: BigInt
 }
+
+type NftAsset @entity {
+  id: ID!
+  tokenId: BigInt!
+  nftAddress: Bytes!
+  expiredAt: BigInt!
+  seller: Bytes!
+  orderCreated: Boolean
+}

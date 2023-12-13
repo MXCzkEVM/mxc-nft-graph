@@ -1,4 +1,4 @@
-import { Address } from "@graphprotocol/graph-ts";
+import {Address, BigInt, Bytes} from "@graphprotocol/graph-ts";
 import {
   AdminChanged as AdminChangedEvent,
   BeaconUpgraded as BeaconUpgradedEvent,
@@ -12,7 +12,7 @@ import {
   AdminChanged,
   BeaconUpgraded,
   Initialized,
-  MarketplaceOrderInfo,
+  MarketplaceOrderInfo, NftAsset,
   Upgraded
 } from "../generated/schema"
 
@@ -71,6 +71,20 @@ export function handleOrderCancelled(event: OrderCancelledEvent): void {
   info.transactionHash = event.transaction.hash
 
   info.save()
+
+
+  let key = `${event.params.nftAddress.toHexString()}-${event.params.assetId}`
+  let entity = NftAsset.load(key)
+  if(entity === null) {
+    entity = new NftAsset(key)
+    entity.expiredAt = BigInt.zero()
+  }
+  entity.tokenId = event.params.assetId
+  entity.nftAddress = event.params.nftAddress
+  entity.orderCreated = false
+  entity.seller = event.params.seller
+  entity.expiredAt = BigInt.zero()
+  entity.save()
 }
 
 export function handleOrderCreated(event: OrderCreatedEvent): void {
@@ -90,6 +104,18 @@ export function handleOrderCreated(event: OrderCreatedEvent): void {
   info.transactionHash = event.transaction.hash
 
   info.save()
+
+  let key = `${event.params.nftAddress.toHexString()}-${event.params.assetId}`
+  let entity = NftAsset.load(key)
+  if(entity === null) {
+    entity = new NftAsset(key)
+    entity.expiredAt = BigInt.zero()
+  }
+  entity.tokenId = event.params.assetId
+  entity.nftAddress = event.params.nftAddress
+  entity.orderCreated = true
+  entity.seller = event.params.seller
+  entity.save()
 }
 
 export function handleOrderSuccessful(event: OrderSuccessfulEvent): void {
@@ -109,6 +135,19 @@ export function handleOrderSuccessful(event: OrderSuccessfulEvent): void {
   info.transactionHash = event.transaction.hash
 
   info.save()
+
+  let key = `${event.params.nftAddress.toHexString()}-${event.params.assetId}`
+  let entity = NftAsset.load(key)
+  if(entity === null) {
+    entity = new NftAsset(key)
+    entity.expiredAt = BigInt.zero()
+  }
+  entity.tokenId = event.params.assetId
+  entity.nftAddress = event.params.nftAddress
+  entity.orderCreated = false
+  entity.seller = event.params.buyer
+  entity.expiredAt = BigInt.zero()
+  entity.save()
 }
 
 export function handleUpgraded(event: UpgradedEvent): void {
@@ -117,8 +156,6 @@ export function handleUpgraded(event: UpgradedEvent): void {
   )
 
   entity.implementation = event.params.implementation
-  event.address
-  event.receipt
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
