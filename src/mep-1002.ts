@@ -5,8 +5,8 @@ import {
 import { MXCMarketplace } from "../generated/MXCMarketplace/MXCMarketplace"
 import {NftAsset} from "../generated/schema"
 
-const ContractAddress = '0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2'
-const Mep1002Address = '0xad5a1855A383732f311241c1A4F9510da0Ad0743'
+const ContractAddress = '0xe031013A7B7Caf05FC20Bdc49B731E3F2f0cAfFd'
+const Mep1002Address = '0x7407459464741c17F8341D7EAFED5a4A5d9303b4'
 
 export function handleTransfer(event: TransferEvent): void {
   let key = `${Mep1002Address}-${event.params.tokenId}`
