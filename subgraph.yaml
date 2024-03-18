@@ -25,12 +25,6 @@ dataSources:
         - name: MXCMarketplace
           file: ./abis/MXCMarketplace.json
       eventHandlers:
-        - event: AdminChanged(address,address)
-          handler: handleAdminChanged
-        - event: BeaconUpgraded(indexed address)
-          handler: handleBeaconUpgraded
-        - event: Initialized(uint8)
-          handler: handleInitialized
         - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
           handler: handleOrderCancelled
         - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
@@ -66,22 +60,6 @@ dataSources:
         - name: MEP1002Name
           file: ./abis/MEP1002Name.json
       eventHandlers:
-        - event: AdminChanged(address,address)
-          handler: handleAdminChanged
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
-        - event: BeaconUpgraded(indexed address)
-          handler: handleBeaconUpgraded
-        - event: ControllerChanged(indexed address,bool)
-          handler: handleControllerChanged
-        - event: Initialized(uint8)
-          handler: handleInitialized
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-        - event: Upgraded(indexed address)
-          handler: handleUpgraded
       file: ./src/mep-1002-name.ts
