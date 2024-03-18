@@ -25,12 +25,6 @@ dataSources:
         - name: MXCMarketplace
           file: ./abis/MXCMarketplace.json
       eventHandlers:
-        - event: AdminChanged(address,address)
-          handler: handleAdminChanged
-        - event: BeaconUpgraded(indexed address)
-          handler: handleBeaconUpgraded
-        - event: Initialized(uint8)
-          handler: handleInitialized
         - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
           handler: handleOrderCancelled
         - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
@@ -42,22 +36,30 @@ dataSources:
           handler: handleUpgraded
       file: ./src/mxc-marketplace.ts
   - kind: ethereum
-    name: MEP1002
+    name: MEP1002Name
     network: mainnet
     source:
-      address: "0x7407459464741c17F8341D7EAFED5a4A5d9303b4"
-      abi: MEP1002
+      address: "0xad5a1855A383732f311241c1A4F9510da0Ad0743"
+      abi: MEP1002Name
       startBlock: 0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Transfer
+        - MEP1002NameAdminChanged
+        - Approval
+        - ApprovalForAll
+        - MEP1002NameBeaconUpgraded
+        - ControllerChanged
+        - MEP1002NameInitialized
+        - OwnershipTransferred
+        - MEP1002NameTransfer
+        - MEP1002NameUpgraded
       abis:
-        - name: MEP1002
-          file: ./abis/MEP1002.json
+        - name: MEP1002Name
+          file: ./abis/MEP1002Name.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/mep-1002.ts
+      file: ./src/mep-1002-name.ts

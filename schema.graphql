@@ -96,5 +96,5 @@ type NftAsset @entity {
   nftAddress: Bytes!
   expiredAt: BigInt!
   seller: Bytes!
-  orderCreated: Boolean
+  price: BigInt!
 }

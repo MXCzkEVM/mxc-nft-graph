@@ -1164,16 +1164,16 @@ export class NftAsset extends Entity {
     this.set("seller", Value.fromBytes(value));
   }
 
-  get orderCreated(): boolean {
-    let value = this.get("orderCreated");
+  get price(): BigInt {
+    let value = this.get("price");
     if (!value || value.kind == ValueKind.NULL) {
-      return false;
+      throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBoolean();
+      return value.toBigInt();
     }
   }
 
-  set orderCreated(value: boolean) {
-    this.set("orderCreated", Value.fromBoolean(value));
+  set price(value: BigInt) {
+    this.set("price", Value.fromBigInt(value));
   }
 }
