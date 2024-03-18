@@ -81,7 +81,7 @@ export function handleOrderCancelled(event: OrderCancelledEvent): void {
   }
   entity.tokenId = event.params.assetId
   entity.nftAddress = event.params.nftAddress
-  entity.orderCreated = false
+  entity.price = BigInt.zero()
   entity.seller = event.params.seller
   entity.expiredAt = BigInt.zero()
   entity.save()
@@ -113,7 +113,7 @@ export function handleOrderCreated(event: OrderCreatedEvent): void {
   }
   entity.tokenId = event.params.assetId
   entity.nftAddress = event.params.nftAddress
-  entity.orderCreated = true
+  entity.price = event.params.priceInWei
   entity.seller = event.params.seller
   entity.save()
 }
@@ -144,7 +144,7 @@ export function handleOrderSuccessful(event: OrderSuccessfulEvent): void {
   }
   entity.tokenId = event.params.assetId
   entity.nftAddress = event.params.nftAddress
-  entity.orderCreated = false
+  entity.price = BigInt.zero()
   entity.seller = event.params.buyer
   entity.expiredAt = BigInt.zero()
   entity.save()
