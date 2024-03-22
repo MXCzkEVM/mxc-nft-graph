@@ -4,7 +4,7 @@ import {
 } from "../generated/MEP1002Name/MEP1002Name"
 import {NftAsset } from "../generated/schema"
 
-const Mep1002Address = '0x7407459464741c17F8341D7EAFED5a4A5d9303b4'
+const Mep1002Address = '0x7407459464741c17f8341d7eafed5a4a5d9303b4'
 
 export function handleTransfer(event: TransferEvent): void {
   let key = `${Mep1002Address}-${event.params.tokenId}`
