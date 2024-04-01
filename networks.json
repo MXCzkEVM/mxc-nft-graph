@@ -5,13 +5,13 @@
       "startBlock": 0
     },
     "MXCMarketplace": {
-      "address": "0x91fd2e13379dF87f752c82E8C16a1aE72601a9B2"
+      "address": "0xe596CC861D0406ce9a9Bd4bD9C4367469019D790"
     },
     "MEP1002": {
-      "address": "0xad5a1855A383732f311241c1A4F9510da0Ad0743"
+      "address": "0x1964F08f56b79051fB3AE9a2C4d8D92A059b1237"
     },
     "MEP1002Name": {
-      "address": "0xad5a1855A383732f311241c1A4F9510da0Ad0743"
+      "address": "0x1964F08f56b79051fB3AE9a2C4d8D92A059b1237"
     }
   }
 }
