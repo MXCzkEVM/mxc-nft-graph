@@ -1,5 +1,5 @@
 {
-  "mainnet": {
+  "geneva": {
     "MXCCollectionFactory": {
       "address": "0xD15A89C59A1aF63588B0b905dAD47eF20058998a",
       "startBlock": 0
