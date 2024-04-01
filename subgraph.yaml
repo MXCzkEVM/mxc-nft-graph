@@ -4,7 +4,7 @@ schema:
 dataSources:
   - kind: ethereum
     name: MXCMarketplace
-    network: mainnet
+    network: geneva
     source:
       address: "0xe596CC861D0406ce9a9Bd4bD9C4367469019D790"
       abi: MXCMarketplace
@@ -37,7 +37,7 @@ dataSources:
       file: ./src/mxc-marketplace.ts
   - kind: ethereum
     name: MEP1002Name
-    network: mainnet
+    network: geneva
     source:
       address: "0x1964F08f56b79051fB3AE9a2C4d8D92A059b1237"
       abi: MEP1002Name
